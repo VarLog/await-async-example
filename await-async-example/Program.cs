@@ -19,28 +19,42 @@
 //  */
 //
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace awaitasyncexample
 {
     class MainClass
     {
-        async static void foo() {
-            var cg = new ContentGetter ();
+        CalculatorMD5 calc;
+        List<Task<string>> tasks;
 
-            var t = cg.GetContentAsync ("http://google.ru");
+        const int threadCount = 100;
 
-            string content = t.Result;
+        MainClass() {
+            calc = new CalculatorMD5 ();
+            tasks = new List<Task<string>> ();
 
-            Console.WriteLine (content.Length);
+
+            int i = threadCount;
+                
+            while(i-- > 0) {
+                tasks.Add (calc.GetHashAsync ("Hello " + (i % 20)));
+            }
+        }
+
+        void WaitAll() {
+            foreach(var t in tasks) {
+                Console.WriteLine ("MD5 == " + t.Result);
+            }
         }
 
         public static void Main (string[] args)
         {
-            
+            MainClass main = new MainClass ();
+
             Console.WriteLine ("Hello World!");
-
-            foo ();
-
+            main.WaitAll ();
         }
     }
 }

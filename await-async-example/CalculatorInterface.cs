@@ -23,10 +23,9 @@ using System.Threading.Tasks;
 
 namespace awaitasyncexample
 {
-    public interface ContentGetterInterface
+    public interface CalculatorInterface
     {
-        Task<string> GetContentAsync(string urlAddress);
-        Task<string> GetCachedContentAsync(string urlAddress);
+        Task<string> GetHashAsync(string text);
     }
 }
 
